@@ -7,7 +7,7 @@ from skimage.feature import local_binary_pattern
 from skimage import data, img_as_float
 from skimage import exposure
 
-def cloud_detection(file_name):
+def cloud_detection(file_name: str, debug=False):
 
     image = cv2.imread(file_name)
     #local contrast adjustment filter
@@ -149,9 +149,10 @@ def cloud_detection(file_name):
     
     #plt.imshow(combined_agree_mask, cmap='gray')
 
-    print("cloud pixels:", cloud_pixels)
-    print("useful pixels:", useful_pixels)
-    print("Percent cover: ", percent_cover)
+    if debug:
+        print("cloud pixels:", cloud_pixels)
+        print("useful pixels:", useful_pixels)
+        print("Percent cover: ", percent_cover)
     
     
     """
@@ -201,7 +202,8 @@ def cloud_detection(file_name):
     f = dim * 180 / (fov * np.pi)
     rr = f * phi
     
-    print("rr:", rr)
+    if debug:
+        print("rr:", rr)
     
     
     
@@ -214,8 +216,9 @@ def cloud_detection(file_name):
     geom_weight_map = np.ones_like(rd, dtype=np.float32)
     geom_weight_map[rdmask] = 1.0 / dAdA[rdmask]
     
-    print("rdmask shape:",rdmask.shape)
-    print("geom shape:", geom_weight_map.shape)
+    if debug:
+        print("rdmask shape:",rdmask.shape)
+        print("geom shape:", geom_weight_map.shape)
     
     
     weighted_image = combined_agree_mask * geom_weight_map
@@ -232,17 +235,19 @@ def cloud_detection(file_name):
     
     
     top_divisor = np.sum(weighted_image_formath)
-    print(top_divisor)
+    if debug:
+        print(top_divisor)
     
     #percent_cover_weighted = round((np.sum(weighted_image) / useful_pixels) * 100, 2) if useful_pixels > 0 else 0
     percent_cover_weighted = round((top_divisor / useful_pixels) * 100, 2) if useful_pixels > 0 else 0
-    print("Weighted percent: ", percent_cover_weighted)
+    if debug:
+        print("Weighted percent: ", percent_cover_weighted)
     
 
     return weighted_image, percent_cover_weighted, file_name, motion_mask
     
-
-cloud_detection('capstonestuff/2025-03-23_18-33-15.jpg')
+if __name__ == '__main__':
+    cloud_detection('set3/2025-03-23_18-33-15.jpg')
     ##################################################################################
     ##################################################################################
 """
