@@ -42,7 +42,7 @@ for images in folder:
     seg_frame1=seg_frame2
     full_array.append(csv_array[0])
     j=j+1
-    print("dickskucekr")
+    print(f"{j}/{len(folder)} images processed ({round(100*j/len(folder))}%)...", end='\r')
     if np.isnan(csv_array[0][3]):
         print("NaN alert!!")
         break
@@ -83,6 +83,4 @@ plt.ylabel("Average Magnitude")
 plt.grid(True)
 plt.savefig(f"{IMG_DIR}_Plot2.png")
 
-
-
-
+print('Done!')
